@@ -26,14 +26,12 @@ public class Producer {
         try {
             br = new BufferedReader(new FileReader(DATA_FILE_LOC));
             int totalLines = countLines(DATA_FILE_LOC);
-            System.out.println(totalLines);
 
             //iterate over each line
             for (int i = 0; i<totalLines; i++){
                 if (i==0){
                     header = br.readLine();
                     headerArray = header.split("\\|");
-                    System.out.println(header);
                 }
                 else{
                     line = br.readLine();

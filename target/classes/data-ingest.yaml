@@ -10,6 +10,8 @@
 ######################################################################################
 ## Kafka Producer Configuration                                                     ##
 ######################################################################################
+kafka.zookeeper: localhost:2181
+kafka.zookeeper.port: 3000
 kafka.producer.servers: localhost:9092
 kafka.producer.acks: all
 kafka.producer.retries: 0
