@@ -1,31 +1,41 @@
 package com.sk.bolts;
 
 import ch.hsr.geohash.GeoHash;
+import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.topology.base.BaseRichBolt;
+import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
+import org.apache.storm.tuple.Values;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.Map;
 
+import static com.sk.constants.GeohashConstants.GEOHASH_PRECISION;
+
 /**
  * Created by SamK on 12/5/16.
  */
-public class GeohashBolt extends BaseBasicBolt {
+public class GeohashBolt extends BaseRichBolt {
+    Map _map;
+    TopologyContext _toppologyContext;
+    OutputCollector _outputCollector;
 
     @Override
-    public void prepare (Map config, TopologyContext content) {
-
+    public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
+        this._map = map;
+        this._toppologyContext = topologyContext;
+        this._outputCollector = outputCollector;
     }
 
     @Override
-    public void execute(Tuple tuple, BasicOutputCollector basicOutputCollector) {
+    public void execute(Tuple tuple) {
         String tupleString = tuple.getString(0);
-        System.out.println("TESTZZZ"+tupleString);
         JSONParser parser = new JSONParser();
         JSONObject json = null;
         try {
@@ -33,21 +43,27 @@ public class GeohashBolt extends BaseBasicBolt {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        System.out.printf("PRIMARY LAT");
-        System.out.println(json.get("PRIM_LAT_DEC"));
-        //        String geoHash = String.valueOf(GeoHash.withCharacterPrecision(180, 180,5));
+        Object lat = json.get("PRIM_LAT_DEC");
+        Object lon = json.get("PRIM_LONG_DEC");
 
-        //GeoHash geoHash = GeoHash.withCharacterPrecision(lat, lon, int# of characaters)
-        //get the lat and lon
-        // use late and lon to create a geohash
-        //put the geohash into the json object...emit either object or string
-        //next bolt is ES bolt
-        //ES bolt needs to convert string to json and persist
+        if (!(lat==null) || !(lon==null)){
+            String geohash = String.valueOf(GeoHash.withCharacterPrecision(Double.valueOf(lat.toString()),
+                    Double.valueOf(lon.toString()), GEOHASH_PRECISION));
+            geohash = geohash.substring(geohash.length() - GEOHASH_PRECISION);
 
+            json.put("geohash", geohash);
+            _outputCollector.emit(new Values(json.toJSONString()));
+            _outputCollector.ack(tuple);
+
+        } else {
+            _outputCollector.ack(tuple);
+        }
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
+        outputFieldsDeclarer.declare(new Fields("json"));
 
     }
+
 }

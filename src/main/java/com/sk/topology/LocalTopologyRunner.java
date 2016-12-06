@@ -1,5 +1,6 @@
 package com.sk.topology;
 
+import com.sk.bolts.ESPersistBolt;
 import com.sk.bolts.GeohashBolt;
 import com.sk.spout.SpoutBuilder;
 import org.apache.storm.Config;
@@ -27,6 +28,8 @@ public class LocalTopologyRunner {
         builder.setSpout("kafka-feed", new SpoutBuilder(config).initializeKafkaSpout());
         builder.setBolt("geohash-bolt", new GeohashBolt())
                 .shuffleGrouping("kafka-feed");
+        builder.setBolt("persist-bolt", new ESPersistBolt())
+                .shuffleGrouping("geohash-bolt");
 
         Config topologyConfig = new Config();
         topologyConfig.setDebug(true);
