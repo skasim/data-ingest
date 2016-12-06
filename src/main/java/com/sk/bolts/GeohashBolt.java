@@ -1,5 +1,6 @@
 package com.sk.bolts;
 
+import ch.hsr.geohash.GeoHash;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -9,8 +10,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +35,9 @@ public class GeohashBolt extends BaseBasicBolt {
         }
         System.out.printf("PRIMARY LAT");
         System.out.println(json.get("PRIM_LAT_DEC"));
+        //        String geoHash = String.valueOf(GeoHash.withCharacterPrecision(180, 180,5));
+
+        //GeoHash geoHash = GeoHash.withCharacterPrecision(lat, lon, int# of characaters)
         //get the lat and lon
         // use late and lon to create a geohash
         //put the geohash into the json object...emit either object or string
