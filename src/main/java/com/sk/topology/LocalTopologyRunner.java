@@ -11,9 +11,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Properties;
 
-import static com.sk.constants.DataIngestConstants.KAFKA_ZOOKEEPER;
 
 /**
  * Created by SamK on 12/4/16.

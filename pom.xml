@@ -70,6 +70,11 @@
           <artifactId>storm-kafka</artifactId>
           <version>1.0.2</version>
       </dependency>
-
+      <!-- https://mvnrepository.com/artifact/ch.hsr/geohash -->
+      <dependency>
+          <groupId>ch.hsr</groupId>
+          <artifactId>geohash</artifactId>
+          <version>1.0.10</version>
+      </dependency>
   </dependencies>
 </project>
