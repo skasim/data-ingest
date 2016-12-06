@@ -11,7 +11,7 @@ import java.util.Map;
  * Hello world!
  *
  */
-public class App 
+public class DataSimulator
 {
     public static void main( String[] args )
     {

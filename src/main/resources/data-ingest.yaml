@@ -11,6 +11,7 @@
 ## Kafka Producer Configuration                                                     ##
 ######################################################################################
 kafka.zookeeper: localhost:2181
+kafka.zkroot: /kafka
 kafka.zookeeper.port: 3000
 kafka.producer.servers: localhost:9092
 kafka.producer.acks: all
@@ -21,4 +22,5 @@ kafka.producer.buffer.memory: 33554432
 kafka.producer.key.serializer: "org.apache.kafka.common.serialization.StringSerializer"
 kafka.producer.value.serializer: "org.apache.kafka.common.serialization.StringSerializer"
 kafka.data.topic: locations
+kafka.consumer.group: locations
 

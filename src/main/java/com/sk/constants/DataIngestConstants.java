@@ -15,5 +15,8 @@ public class DataIngestConstants {
     public static final String KAFKA_VALUE_SERIALIZER = "kafka.producer.value.serializer";
     public static final String KAFKA_DATA_TOPIC = "kafka.data.topic";
     public static final String DATA_FILE_LOC = "/Users/SamK/Projects/java/data-ingest/src/main/resources/test_data.txt";
+    public static final String KAFKA_ZOOKEEPER = "kafka.zookeeper";
+    public static final String KAFKA_ZKROOT = "kafka.zkroot";
+    public static final String KAFKA_CONSUMER_GROUP_ID = "kafka.consumer.group";
 }
 
