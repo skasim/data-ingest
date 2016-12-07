@@ -28,6 +28,7 @@ public class SpoutBuilder {
         BrokerHosts hosts = new ZkHosts(zkHosts);
         SpoutConfig spoutConfig = new SpoutConfig(hosts, topic, zkroot, consumerGroupID);
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
+        spoutConfig.startOffsetTime = -1; //start where ZK last left off. Necessary, otherwise Kafka emitting all messages
         KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
 
         return kafkaSpout;
