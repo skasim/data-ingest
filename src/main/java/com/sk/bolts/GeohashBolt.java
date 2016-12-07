@@ -52,7 +52,7 @@ public class GeohashBolt extends BaseRichBolt {
             geohash = geohash.substring(geohash.length() - GEOHASH_PRECISION);
 
             json.put("geohash", geohash);
-            _outputCollector.emit(new Values(json.toJSONString()));
+            _outputCollector.emit(tuple, new Values(json.toJSONString()));
             _outputCollector.ack(tuple);
 
         } else {

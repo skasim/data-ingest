@@ -1,10 +1,15 @@
 package com.sk.bolts;
 
+import com.sk.utils.ESUtils;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Tuple;
+import org.elasticsearch.client.transport.TransportClient;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.Map;
 
@@ -25,18 +30,44 @@ public class ESPersistBolt extends BaseRichBolt {
 
     @Override
     public void execute(Tuple tuple) {
-        String testzz = String.valueOf(tuple.getValues());
+        String tupleString = String.valueOf(tuple.getString(0));
         System.out.println("TESTZZZZZZZZ");
-        System.out.println(testzz);
+        System.out.println(tupleString);
+
+        JSONParser parser = new JSONParser();
+        JSONObject json = null;
+        try {
+            json = (JSONObject) parser.parse(tupleString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            _outputCollector.ack(tuple);
+        }
+
+            TransportClient client = ESUtils.initializeESTransportClient();
+        if(!(ESUtils.indexExists("test1", client))){
+            ESUtils.createESIndex(client);
+        }
+        ESUtils.indexDocument("test1", client, json.toJSONString());
+        _outputCollector.ack(tuple);
+
+        ESUtils.terminateESTransportClient(client);
+
         //check if index exists in es
         //if it doesn't then create index with index name and alias
         //if it does then
         //post document
 
+
+        //next time
+        //i need to add an alias to my index
+        //actually have the data post to index
+        //make the index name configurable
+        //i think the acking and failing is off bc there are a lot of messages in kafka queue
+
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-
+        //no fields to declare because final bolt in topology
     }
 }

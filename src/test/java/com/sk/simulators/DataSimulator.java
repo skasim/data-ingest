@@ -1,4 +1,4 @@
-package com.sk;
+package com.sk.simulators;
 
 
 import org.yaml.snakeyaml.Yaml;
