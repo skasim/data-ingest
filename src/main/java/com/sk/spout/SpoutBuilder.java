@@ -29,6 +29,7 @@ public class SpoutBuilder {
         SpoutConfig spoutConfig = new SpoutConfig(hosts, topic, zkroot, consumerGroupID);
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
         KafkaSpout kafkaSpout = new KafkaSpout(spoutConfig);
+        spoutConfig.startOffsetTime = -1;
 
         return kafkaSpout;
     }

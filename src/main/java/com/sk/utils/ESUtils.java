@@ -52,6 +52,12 @@ public class ESUtils {
 
     }
     //create an alias
+    public static boolean addAlias(TransportClient client, String alias, String index){
+        client.admin().indices().prepareAliases()
+                .addAlias(index,  alias)
+                .execute().actionGet();
+        return true;
+    }
 
     //index document
     public static boolean indexDocument(String index, TransportClient client, String json){

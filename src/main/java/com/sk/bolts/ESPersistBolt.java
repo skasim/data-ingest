@@ -3,7 +3,9 @@ package com.sk.bolts;
 import com.sk.utils.ESUtils;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
+import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
+import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Tuple;
 import org.elasticsearch.client.transport.TransportClient;
@@ -16,20 +18,20 @@ import java.util.Map;
 /**
  * Created by SamK on 12/6/16.
  */
-public class ESPersistBolt extends BaseRichBolt {
+public class ESPersistBolt extends BaseBasicBolt {
     Map _map;
     TopologyContext _toppologyContext;
     OutputCollector _outputCollector;
 
-    @Override
-    public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
-        this._map = map;
-        this._toppologyContext = topologyContext;
-        this._outputCollector = outputCollector;
-    }
+//    @Override
+//    public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
+//        this._map = map;
+//        this._toppologyContext = topologyContext;
+//        this._outputCollector = outputCollector;
+//    }
 
     @Override
-    public void execute(Tuple tuple) {
+    public void execute(Tuple tuple, BasicOutputCollector _outputCollector) {
         String tupleString = String.valueOf(tuple.getString(0));
         System.out.println("TESTZZZZZZZZ");
         System.out.println(tupleString);
@@ -40,7 +42,7 @@ public class ESPersistBolt extends BaseRichBolt {
             json = (JSONObject) parser.parse(tupleString);
         } catch (ParseException e) {
             e.printStackTrace();
-            _outputCollector.ack(tuple);
+
         }
 
             TransportClient client = ESUtils.initializeESTransportClient();
@@ -48,7 +50,7 @@ public class ESPersistBolt extends BaseRichBolt {
             ESUtils.createESIndex(client);
         }
         ESUtils.indexDocument("test1", client, json.toJSONString());
-        _outputCollector.ack(tuple);
+
 
         ESUtils.terminateESTransportClient(client);
 
