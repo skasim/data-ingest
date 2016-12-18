@@ -18,5 +18,10 @@ public class DataIngestConstants {
     public static final String KAFKA_ZOOKEEPER = "kafka.zookeeper";
     public static final String KAFKA_ZKROOT = "kafka.zkroot";
     public static final String KAFKA_CONSUMER_GROUP_ID = "kafka.consumer.group";
+    public static final String ELASTICSEARCH_INDEX_NAME = "elasticsearch.index.name";
+    public static final String ELASTICSEARCH_HOST_ADDRESS = "elasitcsearch.host.address";
+    public static final String ELASTICSEARCH_HOST_PORT = "elasticsearch.host.port";
+    public static final String ELASTICSEARCH_INDEX_TYPE = "elasticsearch.index.type";
+    public static final String ELASTICSEARCH_INDEX_ALIAS = "elasticsearch.index.alias";
 }
 

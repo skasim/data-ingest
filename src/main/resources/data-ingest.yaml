@@ -23,4 +23,11 @@ kafka.producer.key.serializer: "org.apache.kafka.common.serialization.StringSeri
 kafka.producer.value.serializer: "org.apache.kafka.common.serialization.StringSerializer"
 kafka.data.topic: locations
 kafka.consumer.group: locations
-
+######################################################################################
+## ElasticSearch Configuration                                                      ##
+######################################################################################
+elasticsearch.index.name: locations
+elasitcsearch.host.address: localhost
+elasticsearch.host.port: 9300
+elasticsearch.index.type: "location"
+elasticsearch.index.alias: "loc"

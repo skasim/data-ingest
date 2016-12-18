@@ -13,6 +13,8 @@ import org.json.simple.parser.ParseException;
 
 import java.util.Map;
 
+import static com.sk.constants.DataIngestConstants.ELASTICSEARCH_INDEX_NAME;
+
 /**
  * Created by SamK on 12/6/16.
  */
@@ -31,8 +33,6 @@ public class ESPersistBolt extends BaseRichBolt {
     @Override
     public void execute(Tuple tuple) {
         String tupleString = String.valueOf(tuple.getString(0));
-        System.out.println("TESTZZZZZZZZ");
-        System.out.println(tupleString);
 
         JSONParser parser = new JSONParser();
         JSONObject json = null;
@@ -42,28 +42,18 @@ public class ESPersistBolt extends BaseRichBolt {
             e.printStackTrace();
             _outputCollector.ack(tuple);
         }
-
             TransportClient client = ESUtils.initializeESTransportClient();
-        if(!(ESUtils.indexExists("test1", client))){
+        //check if index exists in ES
+        if(!(ESUtils.indexExists(client))){
+            //if index doesn't exist, create it with an alias
             ESUtils.createESIndex(client);
+            ESUtils.createAlias(client);
         }
-        ESUtils.indexDocument("test1", client, json.toJSONString());
+        // if index exists, post document
+        ESUtils.indexDocument(client, json.toJSONString());
         _outputCollector.ack(tuple);
 
         ESUtils.terminateESTransportClient(client);
-
-        //check if index exists in es
-        //if it doesn't then create index with index name and alias
-        //if it does then
-        //post document
-
-
-        //next time
-        //i need to add an alias to my index
-        //actually have the data post to index
-        //make the index name configurable
-        //i think the acking and failing is off bc there are a lot of messages in kafka queue
-
     }
 
     @Override

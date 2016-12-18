@@ -21,8 +21,10 @@ public class LocalTopologyRunner {
     private static final int TEN_MINUTES = 600000;
 
     public static void main(String[] args) {
+        //load yaml file
         InputStream is = ClassLoader.class.getResourceAsStream("/data-ingest.yaml");;
         Yaml yaml = new Yaml();
+
         Map config = (Map) yaml.load(is);
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("kafka-feed", new SpoutBuilder(config).initializeKafkaSpout());
@@ -31,6 +33,7 @@ public class LocalTopologyRunner {
         builder.setBolt("persist-bolt", new ESPersistBolt())
                 .shuffleGrouping("geohash-bolt");
 
+        //create configuration object with values from yaml file
         Config topologyConfig = new Config();
         topologyConfig.setDebug(true);
 
