@@ -13,7 +13,6 @@ import org.json.simple.parser.ParseException;
 
 import java.util.Map;
 
-import static com.sk.constants.DataIngestConstants.ELASTICSEARCH_INDEX_NAME;
 
 /**
  * Created by SamK on 12/6/16.
